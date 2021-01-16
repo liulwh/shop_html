@@ -65,15 +65,15 @@
         </el-table-column>
 
 
-        <!--<el-table-column
+        <el-table-column
           fixed="right"
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button type="text" size="small"@click="() => updateFormFlag=true">编辑</el-button>
-            <el-button type="text" size="small" v-on:click="deleteBrand(scope.row.id)">删除</el-button>
+            <!--<el-button type="text" size="small"@click="() => updateFormFlag=true">编辑</el-button>-->
+            <el-button type="text" size="small" v-on:click="deleteSku(scope.row.id)">删除</el-button>
           </template>
-        </el-table-column>-->
+        </el-table-column>
 
       </el-table>
       <el-pagination
@@ -114,7 +114,16 @@
 
             alert("查询失败")
           })
-        },handleCurrentChange:function(start){ //跳转页面
+        },deleteSku:function (id) {
+
+          this.$ajax.delete("http://localhost:8080/api/skukey/delSkuKey?id="+id).then(function () {
+            alert("删除成功");
+            history.go(0);
+          }).catch(function () {
+
+          })
+        }
+        ,handleCurrentChange:function(start){ //跳转页面
           console.log(start);
           this.start=start;
           this.queryData(start);

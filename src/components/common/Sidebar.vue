@@ -73,6 +73,10 @@ export default {
                   {
                     index: 'Brand',
                     title: '品牌管理'
+                  },
+                  {
+                    index: 'Skukey',
+                    title: '属性管理'
                   }
 
                   ]

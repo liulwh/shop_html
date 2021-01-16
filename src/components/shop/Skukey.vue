@@ -2,6 +2,8 @@
     <div>
       <h1>属性</h1>
 
+      <el-button type="success" @click="addFormFlag=true">新增</el-button>
+
       <el-table
         :data="tableData"
         style="width: 100%"
@@ -87,6 +89,55 @@
       </el-pagination>
 
 
+      <!--  新增的弹框   -->
+      <el-dialog title="录入属性信息" :visible.sync="addFormFlag">
+
+        <el-form :model="addAttributeForm"  label-width="80px">
+
+          <el-form-item label="属性名称" prop="name">
+            <el-input v-model="addAttributeForm.name" autocomplete="off" ></el-input>
+          </el-form-item>
+
+
+          <el-form-item label="中文名称" prop="nameCH">
+            <el-input v-model="addAttributeForm.nameCH"></el-input>
+          </el-form-item>
+
+          <el-form-item label="分类" prop="typeId">
+            <el-input v-model="addAttributeForm.typeId"></el-input>
+          </el-form-item>
+
+          <el-form-item label="是否SKU" prop="isSKU">
+            <el-radio v-model="addAttributeForm.isSKU" label="0">否</el-radio>
+            <el-radio v-model="addAttributeForm.isSKU" label="1">是</el-radio>
+          </el-form-item>
+
+          <el-form-item label="是否删除" prop="isDel">
+            <el-radio v-model="addAttributeForm.isDel" label="0">不删除</el-radio>
+            <el-radio v-model="addAttributeForm.isDel" label="1">删除</el-radio>
+          </el-form-item>
+
+          <!--属性的类型    0 下拉框     1 单选框      2  复选框   3  输入框-->
+          <el-form-item label="属性的类型" prop="type">
+            <el-radio v-model="addAttributeForm.type" label="0">下拉框</el-radio>
+            <el-radio v-model="addAttributeForm.type" label="1">单选框</el-radio>
+            <el-radio v-model="addAttributeForm.type" label="2">复选框</el-radio>
+            <el-radio v-model="addAttributeForm.type" label="3">输入框</el-radio>
+          </el-form-item>
+
+          <el-form-item label="操作人" prop="author">
+            <el-input v-model="addAttributeForm.author"></el-input>
+          </el-form-item>
+
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addFormFlag = false">取 消</el-button>
+          <el-button type="primary" @click="addForm">确 定</el-button>
+        </div>
+      </el-dialog>
+
+
     </div>
 </template>
 
@@ -99,7 +150,19 @@
             sizes:[2,3,5,10],
             size:2,
             start:1,
-            count:0
+            count:0,
+
+            /*新增*/
+            addFormFlag:false,
+            addAttributeForm:{
+              name:"",
+              nameCH:"",
+              typeId:"",
+              type:[],
+              isSKU:"",
+              isDel:"0",
+              author:""
+            },
           }
       },
       methods:{
@@ -119,6 +182,15 @@
           this.$ajax.delete("http://localhost:8080/api/skukey/delSkuKey?id="+id).then(function () {
             alert("删除成功");
             history.go(0);
+          }).catch(function () {
+
+          })
+        },
+        addForm:function () {
+          var athis=this;
+          this.$ajax.post("http://localhost:8080/api/skukey/addSkuKey",this.$qs.stringify(this.addAttributeForm)).then(function () {
+            athis.addFormFlag = false;
+            athis.queryData(1);
           }).catch(function () {
 
           })

@@ -213,7 +213,7 @@
         <el-table
           :data="AttrValueTableData"
           style="width: 100%"
-          @row-click="getDetails">
+          @row-click="getSkuVaDeta">
 
           <el-table-column property="name" label="属性" width="150"></el-table-column>
           <el-table-column property="nameCH" label="属性值" width="200"></el-table-column>
@@ -223,6 +223,8 @@
             label="操作"
             width="300">
             <template slot-scope="scope">
+              <el-button type="text" size="small"
+                         @click="() => updateSkuVaFlag=true">编辑</el-button>
               <el-button type="danger" size="small" v-on:click="deleteSkuValue(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -252,6 +254,24 @@
         </el-dialog>
 
 
+        <!--  修改的弹框   -->
+        <el-dialog title="录入属性信息"  :visible.sync="updateSkuVaFlag">
+
+          <el-form :model="updateSkuValueForm"   label-width="80px">
+
+            <el-form-item label="英文名称" prop="name">
+              <el-input v-model="updateSkuValueForm.name"  ></el-input>
+            </el-form-item>
+            <el-form-item label="中文名称" prop="nameCH">
+              <el-input v-model="updateSkuValueForm.nameCH"></el-input>
+            </el-form-item>
+
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="updateSkuVaFlag = false">取 消</el-button>
+            <el-button type="primary" @click="updateSkuValue">确 定</el-button>
+          </div>
+        </el-dialog>
 
 
       </div>
@@ -296,12 +316,18 @@
               isDel:"",
               author:""
             },
+            updateSkuValueForm:{
+              name:"",
+              nameCH:"",
+              typeId:""
+            },
             skuValueFlag:false,
             AttrValueTableData:[],
             addSkuValueFormFlag:false,
             addSkuValue:{
               skuKeyId:""
-            }
+            },
+            updateSkuVaFlag:false
           }
       },
       methods:{
@@ -346,6 +372,12 @@
           athis.updateAttributeForm.author=row.author;
           athis.querySkuV(athis.updateAttributeForm.id);
           console.log("属性修改"+JSON.stringify(row))//此时就能拿到整行的信息
+        },getSkuVaDeta(row){
+          var athis = this;
+          athis.updateSkuValueForm.id=row.id;
+          athis.updateSkuValueForm.skuKeyId=row.skuKeyId;
+          athis.updateSkuValueForm.name=row.name;
+          athis.updateSkuValueForm.nameCH=row.nameCH;
         },
         updateForm:function (rs) {
           console.log("ssss"+rs);
@@ -356,7 +388,16 @@
 
           }).catch(err=>console.log(err))
 
-        },fmt:function(a,b,c,d){
+        },updateSkuValue:function (rs) {
+          console.log("ssss"+rs);
+          var a =this;
+          this.$ajax.post("http://localhost:8080/api/SkuValue/updateSkuValue",this.$qs.stringify(this.updateSkuValueForm)).then(res=>{
+            this.updateSkuVaFlag=false;
+
+
+          }).catch(err=>console.log(err))
+        }
+        ,fmt:function(a,b,c,d){
           if(c==0){
             return "下拉框";
           }

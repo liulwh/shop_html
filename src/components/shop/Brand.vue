@@ -113,7 +113,7 @@
         <el-form-item label="LOGO">
           <el-upload
             class="upload-demo"
-            action="http://192.168.1.135:8080/uploadFile/photo"
+            action="http://localhost:8080/uploadFile/uploadFile"
             :on-success="imgCallBack"
             name="file"
             list-type="picture">
@@ -167,13 +167,14 @@
         <el-form-item label="imgpath">
           <el-upload
             class="upload-demo"
-            action="http://192.168.1.135:8080/uploadFile/photo"
+            action="http://localhost:8080/uploadFile/uploadFile"
             :on-success="imgCallBack"
-            name="img"
+            name="file"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">不超过500kb</div>
 
+             <img width="50px" :src="updateBrandForm.imgpath"/>
           </el-upload>
         </el-form-item>
 
@@ -256,6 +257,7 @@
           athis.updateBrandForm.ord=row.ord;
           athis.updateBrandForm.author=row.author;
           athis.updateBrandForm.imgpath=row.imgpath;
+          console.log(row.imgpath);
           console.log(row)//此时就能拿到整行的信息
         },
   updateForm:function (rs) {
@@ -291,7 +293,9 @@
         },imgCallBack:function(response, file, fileList){ //图片上传的回调函数
           // 赋值
           console.log(response);
-          this.addBrandForm.imgpath=response.url;
+          this.addBrandForm.imgpath=response.data;
+          this.updateBrandForm.imgpath=response.data;
+          console.log("修改之后的回显"+this.updateBrandForm.imgpath)
         },deleteBrand:function (id) {
           ajax.delete("http://localhost:8080/api/brand/delBrand?id="+id).then(function () {
             history.go(0);

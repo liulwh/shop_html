@@ -18,12 +18,7 @@
       v-on:click="updateFormFlag=true">
       修改
     </el-button>
-    <el-button
-      type="text"
-      size="mini"
-      @click="() => deleteType(node, data)">
-      删除
-    </el-button>
+
   </span>
 </span>
 

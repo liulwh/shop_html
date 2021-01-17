@@ -30,8 +30,8 @@
 
 
         <el-table-column
-          prop="typeId"
-          label="品牌id">
+          prop="typeName"
+          label="分类">
         </el-table-column>
 
         <!--<el-table-column
@@ -41,7 +41,8 @@
 
         <el-table-column
           prop="type"
-          label="属性的类型">
+          label="属性的类型"
+          :formatter="fmt">
         </el-table-column>
 
        <!-- <el-table-item label="特殊资源">
@@ -51,7 +52,7 @@
           </el-radio-group>
         </el-table-item>-->
 
-        <el-table-column
+       <!-- <el-table-column
           prop="createDate"
           label="上架时间">
         </el-table-column>
@@ -59,22 +60,23 @@
         <el-table-column
           prop="updateDate"
           label="下架时间">
-        </el-table-column>
+        </el-table-column>-->
 
 
-        <el-table-column
+        <!--<el-table-column
           prop="author"
           label="操作人">
-        </el-table-column>
+        </el-table-column>-->
 
 
         <el-table-column
           fixed="right"
           label="操作"
-          width="100">
+          width="200">
           <template slot-scope="scope">
-            <el-button type="warning" size="small"
+            <el-button type="text" size="small"
                        @click="() => updateFormFlag=true">编辑</el-button>
+            <el-button type="text" size="small"  v-on:click="skuValueFlag=true" >维护属性value</el-button>
             <el-button type="text" size="small" v-on:click="deleteSku(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -96,6 +98,15 @@
 
         <el-form :model="addAttributeForm"  label-width="80px">
 
+
+          <el-form-item label="分类">
+            <el-select v-model="addAttributeForm.typeId" placeholder="请选择分类">
+              <el-option label="请选择" :value="-1"></el-option>
+              <el-option v-for="item in types" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+
+
           <el-form-item label="属性名称" prop="name">
             <el-input v-model="addAttributeForm.name" autocomplete="off" ></el-input>
           </el-form-item>
@@ -105,19 +116,19 @@
             <el-input v-model="addAttributeForm.nameCH"></el-input>
           </el-form-item>
 
-          <el-form-item label="分类" prop="typeId">
-            <el-input v-model="addAttributeForm.typeId"></el-input>
-          </el-form-item>
+
+
+
 
           <el-form-item label="是否SKU" prop="isSKU">
             <el-radio v-model="addAttributeForm.isSKU" label="0">否</el-radio>
             <el-radio v-model="addAttributeForm.isSKU" label="1">是</el-radio>
           </el-form-item>
 
-          <el-form-item label="是否删除" prop="isDel">
+      <!--    <el-form-item label="是否删除" prop="isDel">
             <el-radio v-model="addAttributeForm.isDel" label="0">不删除</el-radio>
             <el-radio v-model="addAttributeForm.isDel" label="1">删除</el-radio>
-          </el-form-item>
+          </el-form-item>-->
 
           <!--属性的类型    0 下拉框     1 单选框      2  复选框   3  输入框-->
           <el-form-item label="属性的类型" prop="type">
@@ -127,9 +138,9 @@
             <el-radio v-model="addAttributeForm.type" label="3">输入框</el-radio>
           </el-form-item>
 
-          <el-form-item label="操作人" prop="author">
+          <!--<el-form-item label="操作人" prop="author">
             <el-input v-model="addAttributeForm.author"></el-input>
-          </el-form-item>
+          </el-form-item>-->
 
 
         </el-form>
@@ -154,8 +165,11 @@
             <el-input v-model="updateAttributeForm.nameCH"></el-input>
           </el-form-item>
 
-          <el-form-item label="分类" prop="typeId">
-            <el-input v-model="updateAttributeForm.typeId"></el-input>
+          <el-form-item label="分类">
+            <el-select v-model="updateAttributeForm.typeId" placeholder="请选择分类">
+              <el-option label="请选择" :value="-1"></el-option>
+              <el-option v-for="item in types" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="是否SKU" prop="isSKU">
@@ -190,6 +204,22 @@
       </el-dialog>
 
 
+      <!--  属性值维护的弹框   -->
+
+      <div>
+        <el-button type="success" @click="addskuValueFormFlag=true">新增</el-button>
+      <el-dialog title="修改属性值信息" :visible.sync="skuValueFlag">
+        <el-table
+          :data="AttrValueTableData"
+          style="width: 100%"
+          @row-click="getDetails">
+
+          <el-table-column property="name" label="属性" width="150"></el-table-column>
+          <el-table-column property="nameCH" label="属性值" width="200"></el-table-column>
+        </el-table>
+
+      </el-dialog>
+      </div>
     </div>
 </template>
 
@@ -209,12 +239,18 @@
             addAttributeForm:{
               name:"",
               nameCH:"",
-              typeId:"",
+              typeId:"-1",
               type:[],
               isSKU:"",
               isDel:"0",
               author:""
             },
+            types:[
+              {"id":3,name:"商品/电子商品/手机"},
+              {"id":5,name:"商品/衣服/上衣"},
+              {"id":14,name:"商品/汽车/轿车"},
+              {"id":15,name:"商品/汽车/大奔"},],
+
             updateFormFlag:false,
             updateAttributeForm:{
               name:"",
@@ -224,7 +260,9 @@
               isSKU:"",
               isDel:"",
               author:""
-            }
+            },
+            skuValueFlag:false,
+            AttrValueTableData:[]
           }
       },
       methods:{
@@ -258,6 +296,7 @@
           })
         }, getDetails(row){
           var athis = this;
+
           athis.updateAttributeForm.id=row.id;
           athis.updateAttributeForm.name=row.name;
           athis.updateAttributeForm.nameCH=row.nameCH;
@@ -266,6 +305,7 @@
           athis.updateAttributeForm.isSKU=row.isSKU;
           athis.updateAttributeForm.isDel=row.isDel;
           athis.updateAttributeForm.author=row.author;
+          athis.querySkuV(athis.updateAttributeForm.id);
           console.log("属性修改"+JSON.stringify(row))//此时就能拿到整行的信息
         },
         updateForm:function (rs) {
@@ -276,6 +316,26 @@
             a.queryData(1);
 
           }).catch(err=>console.log(err))
+
+        },fmt:function(a,b,c,d){
+          if(c==0){
+            return "下拉框";
+          }
+          if(c==1){
+            return "单选框";
+          }if(c==2){
+            return "复选框";
+          }if(c==3){
+            return "输入框";
+          }
+        },querySkuV:function (id) {
+          var athis=this;
+          this.$ajax.get("http://localhost:8080/api/SkuValue/queryData?skuId="+id).then(function (res) {
+             console.log(res);
+            athis.AttrValueTableData=res.data.data.list;
+          }).catch(function () {
+            alert("查询skuV失败");
+          })
 
         }
         ,handleCurrentChange:function(start){ //跳转页面

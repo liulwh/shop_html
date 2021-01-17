@@ -217,6 +217,16 @@
 
           <el-table-column property="name" label="属性" width="150"></el-table-column>
           <el-table-column property="nameCH" label="属性值" width="200"></el-table-column>
+
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="300">
+            <template slot-scope="scope">
+              <el-button type="danger" size="small" v-on:click="deleteSkuValue(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+
         </el-table>
 
       </el-dialog>
@@ -380,6 +390,14 @@
 
 
 
+        },deleteSkuValue:function (id) {
+          this.$ajax.delete("http://localhost:8080/api/SkuValue/deleteSkuValue?id="+id).then(function () {
+
+            alert("删除成功");
+
+          }).catch(function () {
+            alert("新增skuV失败");
+          })
         }
         ,handleCurrentChange:function(start){ //跳转页面
           console.log(start);

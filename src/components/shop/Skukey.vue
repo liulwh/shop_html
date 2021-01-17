@@ -207,8 +207,9 @@
       <!--  属性值维护的弹框   -->
 
       <div>
-        <el-button type="success" @click="addskuValueFormFlag=true">新增</el-button>
+
       <el-dialog title="修改属性值信息" :visible.sync="skuValueFlag">
+        <el-button type="success" @click="addSkuValueFormFlag=true">新增</el-button>
         <el-table
           :data="AttrValueTableData"
           style="width: 100%"
@@ -219,6 +220,30 @@
         </el-table>
 
       </el-dialog>
+
+
+        <!--  新增的弹框   -->
+        <el-dialog title="录入属性信息"  :visible.sync="addSkuValueFormFlag">
+
+          <el-form :model="addSkuValue"   label-width="80px">
+
+            <el-form-item label="英文名称" prop="name">
+              <el-input v-model="addSkuValue.name"  ></el-input>
+            </el-form-item>
+            <el-form-item label="中文名称" prop="nameCH">
+              <el-input v-model="addSkuValue.nameCH"></el-input>
+            </el-form-item>
+
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="addSkuValueFormFlag = false">取 消</el-button>
+            <el-button type="primary" @click="addSkuValueForm">确 定</el-button>
+          </div>
+        </el-dialog>
+
+
+
+
       </div>
     </div>
 </template>
@@ -262,7 +287,11 @@
               author:""
             },
             skuValueFlag:false,
-            AttrValueTableData:[]
+            AttrValueTableData:[],
+            addSkuValueFormFlag:false,
+            addSkuValue:{
+              skuKeyId:""
+            }
           }
       },
       methods:{
@@ -336,6 +365,20 @@
           }).catch(function () {
             alert("查询skuV失败");
           })
+
+        },addSkuValueForm:function () {
+          var athis=this;
+         this.addSkuValue.skuKeyId=athis.updateAttributeForm.id;
+          alert(  athis.updateAttributeForm.id);
+          this.$ajax.post("http://localhost:8080/api/SkuValue/addSkuValue",this.$qs.stringify(this.addSkuValue)).then(function () {
+            athis.addSkuValueFormFlag = false;
+
+          }).catch(function () {
+            alert("新增skuV失败");
+          })
+
+
+
 
         }
         ,handleCurrentChange:function(start){ //跳转页面

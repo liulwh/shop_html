@@ -318,11 +318,13 @@
               isDel:"0",
               author:""
             },
+            ajaxTypeData:[],
+            typeName:"",
             types:[
-              {"id":3,name:"商品/电子商品/手机"},
+              /*{"id":3,name:"商品/电子商品/手机"},
               {"id":5,name:"商品/衣服/上衣"},
               {"id":14,name:"商品/汽车/轿车"},
-              {"id":15,name:"商品/汽车/大奔"},],
+              {"id":15,name:"商品/汽车/大奔"},*/],
 
             updateFormFlag:false,
             updateAttributeForm:{
@@ -413,9 +415,7 @@
           this.$ajax.post("http://localhost:8080/api/SkuValue/updateSkuValue",this.$qs.stringify(this.updateSkuValueForm)).then(res=>{
             this.updateSkuVaFlag=false;
               alert("修改成功");
-
             athis.querySkuV();
-
           }).catch(err=>console.log(err))
         }
         ,fmt:function(a,b,c,d){
@@ -431,10 +431,7 @@
           }
         },querySkuV:function (id) {
           var athis=this;
-          console.log(id);
-
-
-
+          //console.log(id);
          // http://localhost:8080/api/skukey/querySkuKeyData?start="+this.start+"&size="+this.size
           this.$ajax.get("http://localhost:8080/api/SkuValue/queryData?skuKeyId="+athis.updateAttributeForm.id+"&size="+this.vsize+"&start="+this.vstart).then(function (res) {
              console.log(res);
@@ -457,11 +454,8 @@
           }).catch(function () {
             alert("新增skuV失败");
           })
-
-
-
-
-        },deleteSkuValue:function (id) {
+        }
+        ,deleteSkuValue:function (id) {
           var athis=this;
           this.$ajax.delete("http://localhost:8080/api/SkuValue/deleteSkuValue?id="+id).then(function () {
 
@@ -470,6 +464,62 @@
           }).catch(function () {
             alert("删除skuV失败");
           })
+        },queryTypeData:function(){
+
+          this.$ajax.get("http://localhost:8080/api/type/getData").then(res=>{
+
+            // [{id:1,"name":"",pid:2},{}]
+            this.ajaxTypeData=res.data.data;
+            //{"id":7,name:"分类/电子产品/手机"},
+            //先找到子节点的数据   this.types;
+            this.getChildrenType();
+            debugger;
+            //遍历所有的子节点
+            for (let i = 0; i <this.types.length ; i++) {
+              this.typeName=""; // 全局变量   临时存 层级名称
+              //处理子节点的name属性
+              this.chandleName(this.types[i]);
+              //   a/b/c/f/d/e
+              //给name重新赋值
+              this.types[i].name=this.typeName.split("/").reverse().join("/");
+            }
+
+          })
+        }, //给我一个节点  得到层级name
+        chandleName:function(node){
+          if(node.pid!=0){ //临界值
+            this.typeName+="/"+node.name;
+            //上级节点
+            for (let i = 0; i <this.ajaxTypeData.length ; i++) {
+              if(node.pid==this.ajaxTypeData[i].id){
+                this.chandleName(this.ajaxTypeData[i]);
+                break;
+              }
+            }
+
+          }else{
+            this.typeName+="/"+node.name;
+          }
+        },
+        //得到types的数据      遍历所有ajaxtypedata
+        getChildrenType:function(){
+          //遍历所有的节点数据
+          for (let i = 0; i <this.ajaxTypeData.length ; i++) {
+            let  node=this.ajaxTypeData[i];
+            this.isChildrenNode(node);
+          }
+        },
+        isChildrenNode:function(node){
+          let rs=true; //标示
+          for (let i = 0; i <this.ajaxTypeData.length ; i++) {
+            if(node.id==this.ajaxTypeData[i].pid){
+              rs=false;
+              break;
+            }
+          }
+          if(rs==true){
+            this.types.push(node);
+          }
         }
         ,handleCurrentChange:function(start){ //跳转页面
           console.log(start);
@@ -490,7 +540,10 @@
       },created:function () {
         //请求数据
         this.queryData(1,2);
-        //查询品牌数据
+        //查询类型
+         this.queryTypeData();
+
+
 
 
       }

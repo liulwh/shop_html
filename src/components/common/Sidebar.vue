@@ -77,6 +77,10 @@ export default {
                   {
                     index: 'Skukey',
                     title: '属性管理'
+                  },
+                  {
+                    index: 'Shop',
+                    title: '商品添加'
                   }
 
                   ]

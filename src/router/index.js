@@ -40,6 +40,10 @@ export default new Router({
               path: '/Skukey',
               component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Skukey.vue'),
               meta: { title: '属性管理' }
+            },{
+              path: '/Shop',
+              component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Shop.vue'),
+              meta: { title: '商品添加' }
             }
 
           ]

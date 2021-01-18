@@ -267,7 +267,7 @@
 
 
         <!--  修改的弹框   -->
-        <el-dialog title="录入属性信息"  :visible.sync="updateSkuVaFlag">
+        <el-dialog title="修改属性信息"  :visible.sync="updateSkuVaFlag">
 
           <el-form :model="updateSkuValueForm"   label-width="80px">
 
@@ -402,16 +402,19 @@
           var a =this;
           this.$ajax.post("http://localhost:8080/api/skukey/updateSkuKey",this.$qs.stringify(this.updateAttributeForm)).then(res=>{
             this.updateFormFlag=false;
+            alert("修改成功");
             a.queryData(1);
 
           }).catch(err=>console.log(err))
 
         },updateSkuValue:function (rs) {
           console.log("ssss"+rs);
-          var a =this;
+          var athis =this;
           this.$ajax.post("http://localhost:8080/api/SkuValue/updateSkuValue",this.$qs.stringify(this.updateSkuValueForm)).then(res=>{
             this.updateSkuVaFlag=false;
+              alert("修改成功");
 
+            athis.querySkuV();
 
           }).catch(err=>console.log(err))
         }
@@ -444,9 +447,12 @@
         },addSkuValueForm:function () {
           var athis=this;
          this.addSkuValue.skuKeyId=athis.updateAttributeForm.id;
-          alert(  athis.updateAttributeForm.id);
+          //alert(athis.updateAttributeForm.id);
           this.$ajax.post("http://localhost:8080/api/SkuValue/addSkuValue",this.$qs.stringify(this.addSkuValue)).then(function () {
+
             athis.addSkuValueFormFlag = false;
+             alert("新增成功");
+            athis.addSkuValue={};
             athis.querySkuV();
           }).catch(function () {
             alert("新增skuV失败");
@@ -456,12 +462,13 @@
 
 
         },deleteSkuValue:function (id) {
+          var athis=this;
           this.$ajax.delete("http://localhost:8080/api/SkuValue/deleteSkuValue?id="+id).then(function () {
 
             alert("删除成功");
-
+            athis.querySkuV();
           }).catch(function () {
-            alert("新增skuV失败");
+            alert("删除skuV失败");
           })
         }
         ,handleCurrentChange:function(start){ //跳转页面

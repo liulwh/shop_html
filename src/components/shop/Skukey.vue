@@ -473,7 +473,7 @@
             //{"id":7,name:"分类/电子产品/手机"},
             //先找到子节点的数据   this.types;
             this.getChildrenType();
-            debugger;
+
             //遍历所有的子节点
             for (let i = 0; i <this.types.length ; i++) {
               this.typeName=""; // 全局变量   临时存 层级名称

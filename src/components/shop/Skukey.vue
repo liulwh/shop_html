@@ -76,7 +76,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small"
                        @click="() => updateFormFlag=true">编辑</el-button>
-            <el-button type="text" size="small"  v-on:click="skuValueFlag=true" >维护属性value</el-button>
+            <el-button type="text" v-if="scope.row.type!=3" size="small"  v-on:click="skuValueFlag=true" >维护属性value</el-button>
             <el-button type="text" size="small" v-on:click="deleteSku(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -231,6 +231,18 @@
 
         </el-table>
 
+        <el-pagination
+
+          @current-change="handleSkuVCurrentChange"
+          @size-change="handleSkuVSizeChangee"
+          :page-sizes="vsizes"
+          :page-size="vsize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="vcount">
+        </el-pagination>
+
+
+
       </el-dialog>
 
 
@@ -288,6 +300,12 @@
             size:2,
             start:1,
             count:0,
+
+            vsizes:[2,3,5,10],
+            vsize:2,
+            vstart:1,
+            vcount:0,
+            vid:"",
 
             /*新增*/
             addFormFlag:false,
@@ -410,9 +428,15 @@
           }
         },querySkuV:function (id) {
           var athis=this;
-          this.$ajax.get("http://localhost:8080/api/SkuValue/queryData?skuId="+id).then(function (res) {
+          console.log(id);
+
+
+
+         // http://localhost:8080/api/skukey/querySkuKeyData?start="+this.start+"&size="+this.size
+          this.$ajax.get("http://localhost:8080/api/SkuValue/queryData?skuKeyId="+athis.updateAttributeForm.id+"&size="+this.vsize+"&start="+this.vstart).then(function (res) {
              console.log(res);
             athis.AttrValueTableData=res.data.data.list;
+            athis.vcount=res.data.data.count;
           }).catch(function () {
             alert("查询skuV失败");
           })
@@ -423,7 +447,7 @@
           alert(  athis.updateAttributeForm.id);
           this.$ajax.post("http://localhost:8080/api/SkuValue/addSkuValue",this.$qs.stringify(this.addSkuValue)).then(function () {
             athis.addSkuValueFormFlag = false;
-
+            athis.querySkuV();
           }).catch(function () {
             alert("新增skuV失败");
           })
@@ -447,12 +471,21 @@
         },handleSizeChange:function(size){ //跳转页面
           this.size=size;
           this.queryData(1);
+        },handleSkuVCurrentChange:function(vstart){ //跳转页面
+          console.log(vstart);
+          this.vstart=vstart;
+          this.querySkuV(vstart);
+        },handleSkuVSizeChangee:function(vsize){ //跳转页面
+          this.vsize=vsize;
+          this.querySkuV(1);
         }
 
       },created:function () {
         //请求数据
         this.queryData(1,2);
         //查询品牌数据
+
+
       }
     }
 </script>

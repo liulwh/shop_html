@@ -142,18 +142,18 @@
           <el-form-item v-for="a in  attData" :key="a.id" :label="a.nameCH">
 
             <!--  0 下拉框     1 单选框      2  复选框   3  输入框  -->
-            <el-input v-if="a.type==3" v-model="shuru"></el-input>
+            <el-input v-if="a.type==3" v-model="a.ckValues"></el-input>
 
-            <el-select v-if="a.type==0"  v-model="xiala" placeholder="请选择">
+            <el-select v-if="a.type==0"  v-model="a.ckValues" placeholder="请选择">
               <el-option v-for="b in a.values" :key="b.id"  :label="b.nameCH" :value="b.id" ></el-option>
             </el-select>
 
-            <el-radio-group v-model="bb"  v-if="a.type==1" >
+            <el-radio-group v-model="a.ckValues"  v-if="a.type==1" >
               <el-radio v-for="b in a.values" :key="b.id" :label="b.nameCH"></el-radio>
             </el-radio-group>
 
 
-            <el-checkbox-group  v-if="a.type==2" >
+            <el-checkbox-group v-model="a.ckValues" v-if="a.type==2" >
               <el-checkbox v-for="b in a.values" :key="b.id" :label="b.nameCH" name="type"></el-checkbox>
             </el-checkbox-group>
 
@@ -210,7 +210,7 @@
             },
             attData:[],   //非sku的属性数据
             SKUData:[], //sku属性数据
-
+            ckValues:[],
             skuCK:[], //确定sku复选框绑定的变量名
             tableShow:false, //sku的table是否显示
             cols:[],//skutable的动态表头
@@ -313,6 +313,7 @@
                   if(attrDatas[i].isSKU==0){
 
                     if(attrDatas[i].type!=3){
+                      attrDatas[i].ckValues=[];
                       //发起请求 查询此属性对应的选项值
                       //debugger;
                       ajax.get("http://localhost:8080/api/SkuValue/querySkuValueBySkuKeyId?skuKeyId="+attrDatas[i].id).then(res=>{
@@ -326,6 +327,7 @@
 
                   }else{
                     if(attrDatas[i].type!=3){
+
                       //发起请求 查询此属性对应的选项值
                       ajax.get("http://localhost:8080/api/SkuValue/querySkuValueBySkuKeyId?skuKeyId="+attrDatas[i].id).then(res=>{
                         attrDatas[i].values=res.data.data.data;
@@ -433,14 +435,14 @@
 
         addShopFrom:function(){
 
-          var athis=this;
+
           //  this.addShop  第一页里面表单的数据  商品的基本信息
           //console.log(this.addShop);
 
           let attrs=[];
           for (let i = 0; i <this.attData.length ; i++) {
 
-            let  attData=[];
+            let  attData={};
             attData[this.attData[i].name]=this.attData[i].ckValues;
             attrs.push(attData);
           }
@@ -449,9 +451,11 @@
           this.addShop.sku=JSON.stringify(this.tableSkuData);
           console.log(this.$qs.stringify(this.addShop));
 
-          console.log(this.addShop);
+          console.log(this.addShop.attr);
           debugger;
+          var athis=this;
           athis.$ajax.post("http://localhost:8080/api/shop/addShop",athis.$qs.stringify(this.addShop)).then(function () {
+
 
           }).catch(function () {
 

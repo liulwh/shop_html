@@ -81,6 +81,14 @@ export default {
                   {
                     index: 'Shop',
                     title: '商品添加'
+                  },
+                  {
+                    index: 'ShopShow',
+                    title: '商品展示'
+                  },
+                  {
+                    index: 'ShopType',
+                    title: '测试'
                   }
 
                   ]

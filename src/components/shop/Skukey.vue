@@ -312,7 +312,7 @@
             addAttributeForm:{
               name:"",
               nameCH:"",
-              typeId:"-1",
+              typeId:"",
               type:[],
               isSKU:"",
               isDel:"0",

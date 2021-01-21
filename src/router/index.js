@@ -44,6 +44,10 @@ export default new Router({
               path: '/Shop',
               component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Shop.vue'),
               meta: { title: '商品添加' }
+            },{
+              path: '/ShopShow',
+              component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/ShopShow.vue'),
+              meta: { title: '商品展示' }
             }
 
           ]

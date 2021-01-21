@@ -105,7 +105,7 @@
         </el-form-item>
 
 
-        <el-form-item label="首字母" prop="bandE">
+        <el-form-item label="首字母" prop="brandE">
           <el-input v-model="addBrandForm.brandE"></el-input>
         </el-form-item>
 
@@ -122,7 +122,7 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="描述信息" prop="bandDesc">
+        <el-form-item label="描述信息" prop="brandDesc">
           <el-input type="textarea" v-model="addBrandForm.brandDesc"></el-input>
         </el-form-item>
 
@@ -130,10 +130,10 @@
           <el-input v-model="addBrandForm.ord"></el-input>
         </el-form-item>
 
-        <el-form-item label="是否展示" prop="isDel">
+      <!--  <el-form-item label="是否展示" prop="isDel">
           <el-radio v-model="addBrandForm.isdel" label="0">展示</el-radio>
           <el-radio v-model="addBrandForm.isdel" label="1">不展示</el-radio>
-        </el-form-item>
+        </el-form-item>-->
 
 
       </el-form>
@@ -159,7 +159,9 @@
         </el-form-item>
 
 
-        <el-form-item label="首字母" prop="bandE">
+
+
+        <el-form-item label="首字母" prop="brandE">
           <el-input v-model="updateBrandForm.brandE"></el-input>
         </el-form-item>
 
@@ -178,7 +180,9 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="描述信息" prop="bandDesc">
+
+
+        <el-form-item label="描述信息" prop="brandDesc">
           <el-input type="textarea" v-model="updateBrandForm.brandDesc"></el-input>
         </el-form-item>
 
@@ -188,9 +192,7 @@
 
 
 
-        <el-form-item label="操作人" prop="author">
-          <el-input v-model="updateBrandForm.author"></el-input>
-        </el-form-item>
+
 
 
       </el-form>
@@ -223,9 +225,9 @@
             updateFormFlag:false,
             updateBrandForm:{
               name:"",
-              bandE:"",
+              brandE:"",
               imgpath:"",
-              bandDesc:"",
+              brandDesc:"",
               ord:"",
               isDel:"0",
               author:""

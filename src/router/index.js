@@ -5,6 +5,7 @@ import Left from '@/components/common/Sidebar'
 import Tag from '@/components/common/Tags'
 import Home from '@/components/common/Home'
 import Test from '@/components/Test'
+import Login from '@/components/Login'
 
 Vue.use(Router)
 
@@ -13,9 +14,14 @@ export default new Router({
 
     {
       path: '/',
-      redirect: '/test'
+      redirect: '/Login'
+    },{
+      path:'/Login',
+      component: () => import(/* webpackChunkName: "home" */ '../components/Login.vue'),
+      meta: { title: '登陆页面' },
     },
         {
+
           path: '/',
           component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
           meta: { title: '自述文件' },
@@ -48,6 +54,10 @@ export default new Router({
               path: '/ShopShow',
               component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/ShopShow.vue'),
               meta: { title: '商品展示' }
+            },{
+              path: '/Shop2',
+              component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Shop2.vue'),
+              meta: { title: '商品添加2' }
             }
 
           ]

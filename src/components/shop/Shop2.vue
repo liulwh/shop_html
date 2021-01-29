@@ -163,8 +163,6 @@
 
         </el-form-item>
 
-
-        <el-button style="margin-top: 12px;" v-on:click="active--" >上一步</el-button>
         <el-button style="margin-top: 12px;" v-on:click="addShopFrom" >增加</el-button>
 
 
@@ -416,7 +414,6 @@
         next() {
           if (this.active++ > 1) this.active = 0;
           this.diyibu=true
-
         },
         queryPinpais:function(){
           this.$ajax.get("http://localhost:8080/api/brand/queryBrandData").then(res=>{

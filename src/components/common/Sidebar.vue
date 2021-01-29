@@ -61,6 +61,7 @@ export default {
                     index: 'test',
                     title: '系统首页'
                 },
+
               {
                 icon:"el-icon-shopping-cart-2",
                 index:"4",
@@ -81,6 +82,10 @@ export default {
                   {
                     index: 'Shop',
                     title: '商品添加'
+                  },
+                  {
+                    index: 'Shop2',
+                    title: '商品添加2'
                   },
                   {
                     index: 'ShopShow',

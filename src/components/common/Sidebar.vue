@@ -88,6 +88,10 @@ export default {
                     title: '商品添加2'
                   },
                   {
+                    index: 'Permission',
+                    title: '权限管理'
+                  },
+                  {
                     index: 'ShopShow',
                     title: '商品展示'
                   },

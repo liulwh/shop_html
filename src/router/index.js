@@ -7,6 +7,8 @@ import Home from '@/components/common/Home'
 import Test from '@/components/Test'
 import Login from '@/components/Login'
 
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -58,6 +60,11 @@ export default new Router({
               path: '/Shop2',
               component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Shop2.vue'),
               meta: { title: '商品添加2' }
+            }
+            ,{
+              path: '/Permission',
+              component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Permission.vue'),
+              meta: { title: '权限管理' }
             }
 
           ]

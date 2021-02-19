@@ -65,6 +65,10 @@ export default new Router({
               path: '/Permission',
               component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Permission.vue'),
               meta: { title: '权限管理' }
+            },{
+              path: '/Role',
+              component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Role.vue'),
+              meta: { title: '角色管理' }
             }
 
           ]

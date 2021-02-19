@@ -92,6 +92,10 @@ export default {
                     title: '权限管理'
                   },
                   {
+                    index: 'Role',
+                    title: '角色管理'
+                  },
+                  {
                     index: 'ShopShow',
                     title: '商品展示'
                   },
